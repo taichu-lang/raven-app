@@ -3,5 +3,16 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "classList",
+    "ngClass",
+    "contentContainerClassName",
+    "ListHeaderComponentClassName",
+    "ListFooterComponentClassName",
+    "columnWrapperClassName"
+  ],
+  "tailwindCSS.classFunctions": ["useResolveClassNames"]
 }

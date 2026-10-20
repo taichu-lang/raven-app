@@ -1,9 +1,51 @@
-:root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
-  --font-serif: Georgia, 'Times New Roman', serif;
+@import "tailwindcss";
+@import "uniwind";
+@import "heroui-native/styles";
+
+/* 1. 覆盖 HeroUI 的基础语义变量。
+   HeroUI 的 *-soft / *-hover 颜色都由这些变量自动派生（color-mix），
+   大多数情况下只需要改这里。
+   规则：
+   - 必须包在 :root 里（与 HeroUI 官方写法一致）——否则 Tailwind 会编译成
+     :scope 选择器，Uniwind 原生端无法识别，整块覆盖会被静默丢弃；
+   - 覆盖 HeroUI 已有变量可只写一个主题；
+   - 新增自定义变量名必须在所有主题中成对出现（Uniwind 校验）。 */
+@layer theme {
+  :root {
+    @variant light {
+      --accent: oklch(0.6016 0.07 211.92);
+      --accent-foreground: oklch(0.9454 0.1444 102.84);
+
+      /* 自定义 soft 变量（dark 中必须同名成对出现） */
+      --accent-soft-foreground: color-mix(in oklab, var(--accent) 80%, var(--foreground) 20%);
+      --warning-soft: color-mix(in oklab, var(--warning) 15%, transparent);
+      --danger-soft: oklch(0.8715 0.0685 25.22);
+      --danger-soft-foreground: oklch(0.3563 0.1447 25.69);
+    }
+
+    @variant dark {
+      --accent: oklch(0.3719 0.0166 251.78);
+      --accent-foreground: oklch(0.7309 0.1146 84.99);
+      --focus: oklch(0.9347 0.0128 86.83);
+      --border: color-mix(in oklab, var(--focus) 70%, transparent);
+
+      --background: oklch(0.235 0 0);
+      --default: oklch(0.3492 0.0034 286.22);
+
+      --accent-soft-foreground: oklch(0.9821 0 0);
+      --warning-soft: oklch(0.7936 0.1546 90.09 / 23.9%);
+      --danger-soft: oklch(0.7848 0.1249 25.04 / 23.9%);
+      --danger-soft-foreground: oklch(0.8269 0.0963 24.82);
+    }
+  }
+}
+
+/* 2. 把自定义变量接到 HeroUI 的颜色 token 上。
+   组件类（bg-danger-soft、text-accent-soft-foreground 等）读取的是
+   --color-* token；只定义 --danger-soft 变量本身不会产生任何效果。 */
+@theme inline static {
+  --color-accent-soft-foreground: var(--accent-soft-foreground);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-soft-foreground: var(--danger-soft-foreground);
 }
